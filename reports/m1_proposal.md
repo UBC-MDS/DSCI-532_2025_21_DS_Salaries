@@ -1,4 +1,4 @@
-# Data Science Salary Tracker
+# Data Science Salaries Tracker
 
 ## Section 1: Motivation and Purpose
 
@@ -36,3 +36,9 @@ Using this data we will also derive a new variable, average_year_salary, which c
 ## Section 3: Research questions and usage scenarios
 
 ## Section 4: App sketch & brief description
+
+Description:
+
+The Salary Dashboard provides an interactive analysis of Data Science job salaries, allowing users to filter by company location, job title, experience level, and employment type. Key components include visualizations of salary distribution by employment type, experience level, and company size, as well as a bar chart ranking the top 10 highest-paid job titles. The dashboard highlights average salaries while enabling dynamic exploration of salary trends across different roles and employment structures. Users can gain insights into job market patterns, helping them compare salaries and make informed career decisions.
+
+![Dashboard](../img/sketch.png "App Sketch")
