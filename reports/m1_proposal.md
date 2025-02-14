@@ -2,6 +2,14 @@
 
 ## Section 1: Motivation and Purpose
 
+Our role: Data science career insights provider
+
+Target audience: Students or professionals interested in a data science career
+
+Choosing a career in data science can be challenging, especially when it comes to understanding salary expectations across different job titles, locations, and experience levels. Having access to reliable salary insights can help aspiring data scientists make informed decisions about their career paths, negotiate salaries effectively, and plan for future growth.
+
+To address this challenge, we propose building a data visualization app that allows users to explore salary trends in the data science field. Our app will present salary distributions based on factors such as job title, company size, experience level, and geographical location. Users will be able to filter, sort, and compare different variables to identify trends and better understand what factors contribute to higher salaries in data science.
+
 ## Section 2: Description of data:
 
 The dataset contains 3,755 rows and 11 columns, providing insights into Data Science job salaries across different roles, experience levels, employment types, and locations. 
