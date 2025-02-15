@@ -35,6 +35,13 @@ Using this data we will also derive a new variable, average_year_salary, which c
 
 ## Section 3: Research questions and usage scenarios
 
+Alex is an undergraduate student. He wants to explore the salary trends in the data science field to identify which roles and skills are most lucrative. Specifically, Alex wants to [compare] salaries across different job titles, [analyze] how experience levels affect earnings, and [identify] geographic regions with the highest salaries for data science roles. This will help Alex set career goals and decide whether to focus on roles like Data Scientist, Machine Learning Engineer, or Data Analyst.
+
+When Alex logs into the "Data Science Salaries Dashboard", he will be presented with an overview of salary distributions across various employment types, experience levels, company sizes, and job titles. Alex can [filter] the dataset by job title, job category, job type, and work setting to compare salaries. He can also [adjust] the experience level filter to see how salaries increase with more years of experience. Additionally, Alex can [explore] the geographic distribution of salaries to identify regions with the highest earning potential.
+
+Using the information from the dashboard, Alex creates a personalized career development plan that includes taking advanced courses in machine learning, participating in relevant internships, and networking with professionals in the U.S. data science industry. This plan helps Alex align their academic and professional efforts with their long-term career goals.
+
+
 ## Section 4: App sketch & brief description
 
 Description:
