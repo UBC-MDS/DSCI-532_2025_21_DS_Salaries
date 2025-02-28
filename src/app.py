@@ -3,6 +3,7 @@ import dash_bootstrap_components as dbc
 from dash import Dash, dcc, html, callback, Output, Input
 import pandas as pd 
 import altair as alt
+import dash_vega_components as dvc
 
 # Initialize Dash app with Bootstrap
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -83,6 +84,76 @@ overall_avg_salary = data['salary_in_usd'].mean()
 )
 def update_overall_salary(_):
     return f"${overall_avg_salary:,.2f}"
+
+# Callback: Get options for dropdown of company location
+@app.callback(
+    Output('company-location', 'options'),
+    Input('company-location', 'id') 
+)
+def set_company_location_options(_):
+    unique_locations = sorted(data['company_location'].dropna().unique())
+    options = [{'label': location, 'value': location} for location in unique_locations]
+    return options
+    
+# Callback: Get options for dropdown of experience level
+@app.callback(
+    Output('experience-level', 'options'),
+    Input('experience-level', 'id') 
+)
+def set_experience_level_options(_):
+    unique_experience_levels = sorted(data['experience_level'].dropna().unique())
+    return [{'label': level, 'value': level} for level in unique_experience_levels]
+
+# Callback: Get options for dropdown of exployment type
+@app.callback(
+    Output('employment-type', 'options'),
+    Input('employment-type', 'id')
+)
+def set_employment_type_options(_):
+    unique_employment_types = sorted(data['employment_type'].dropna().unique())
+    return [{'label': emp_type, 'value': emp_type} for emp_type in unique_employment_types]
+
+# Callback to update the card and line chart based on the results of filters
+@app.callback(
+	Output('filtered-average-salary', 'children'),
+    Output('line-chart', 'children'),
+    Input('company-location', 'value'),
+    Input('experience-level', 'value'),
+    Input('employment-type', 'value')
+)
+def update_dashboard(location, experience, employment):
+    # filter
+    filtered_df = data.copy()
+    
+    if location:
+        filtered_df = filtered_df[filtered_df["company_location"] == location]
+    if experience:
+        filtered_df = filtered_df[filtered_df["experience_level"] == experience]
+    if employment:
+        filtered_df = filtered_df[filtered_df["employment_type"] == employment]
+
+    # Calculate average salary based on the outputs of filters
+    avg_salary = filtered_df["salary_in_usd"].mean()
+    avg_salary_text = f"${avg_salary:,.2f}" if not pd.isna(avg_salary) else "N/A"
+
+    # generate line chart
+    line_chart_data = (
+        filtered_df.groupby("work_year")["salary_in_usd"]
+        .mean()
+        .reset_index()
+    )
+
+    line_chart = alt.Chart(line_chart_data).mark_line(point=True).encode(
+        x=alt.X("work_year:O", title="Year"),
+        y=alt.Y("salary_in_usd:Q", title="Average Salary (USD)"),
+        tooltip=["work_year", "salary_in_usd"]
+    ).properties(
+        title="Salary Trend Over 4 Years",
+        width=600,
+        height=400
+    ).interactive().to_dict()
+
+    return avg_salary_text, line_chart
 
 # Run the app
 if __name__ == '__main__':
