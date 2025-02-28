@@ -47,25 +47,25 @@ app.layout = dbc.Container([
         ], className="shadow p-3"), width=4),
 
         dbc.Col(html.Div([
-            html.H4("Bar Chart: Salary by Company Size", className="text-center"),
+            html.H4("Overall Salary by Company Size", className="text-center"),
             html.Div(id='bar-company-size', className="border p-3")  # Placeholder
         ]), width=4),
         
         dbc.Col(html.Div([
-            html.H4("Bar Chart: Salary by Job Title (Top 10)", className="text-center"),
+            html.H4("Overall Top 10 Job Title by Salary", className="text-center"),
             html.Div(id='bar-job-title', className="border p-3")  # Placeholder
         ]), width=4),
     ], className="mb-4"),
 
     dbc.Row([
         dbc.Col(html.Div([
-            html.H4("Bar Chart: Salary by Employment Type", className="text-center"),
-            html.Div(id='bar-employment-type', className="border p-3")  # Placeholder
-        ]), width=6),
+            html.H4("Overall Salary by Employment Type", className="text-center"),
+            dvc.Vega(id='bar-employment-type', className="border p-3")
+            ]), width=6),
         
         dbc.Col(html.Div([
-            html.H4("Bar Chart: Salary by Experience Level", className="text-center"),
-            html.Div(id='bar-experience-level', className="border p-3")  # Placeholder
+            html.H4("Overall Salary by Experience Level", className="text-center"),
+            dvc.Vega(id='bar-experience-level', className="border p-3")
         ]), width=6),
         
     ], className="mb-4"),
@@ -152,6 +152,63 @@ def update_dashboard(location, experience, employment):
     ).interactive()
 
     return avg_salary_text, line_chart.to_dict()
+
+# Callback to generate the Bar Chart for Salary by Employment Type (Unfiltered)
+@app.callback(
+    Output('bar-employment-type', 'spec'),
+    Input('bar-employment-type', 'id')  # Dummy trigger
+)
+def update_bar_chart_employment_type(_):
+    # Aggregate: Overall average salary by employment type
+    employment_chart_data = (
+        data.groupby("employment_type")["salary_in_usd"]
+        .mean()
+        .reset_index()
+    )
+
+    if employment_chart_data.empty:
+        return html.P("No data available.")
+
+    # Create Altair Bar Chart
+    employment_chart = alt.Chart(employment_chart_data).mark_bar().encode(
+        x=alt.X("salary_in_usd:Q", title="Average Salary (USD)"),
+        y=alt.Y("employment_type:N", title="Employment Type", sort="-x"),
+        tooltip=["employment_type", "salary_in_usd"]
+    ).properties(
+        width=600,
+        height=200
+    )
+
+    return employment_chart.to_dict()
+
+# Callback to generate the Bar Chart for Salary by Experience Level (Unfiltered)
+@app.callback(
+    Output('bar-experience-level', 'spec'),
+    Input('bar-experience-level', 'id')  # Dummy trigger
+)
+def update_bar_chart_experience_level(_):
+    # Aggregate: Overall average salary by experience level
+    experience_chart_data = (
+        data.groupby("experience_level")["salary_in_usd"]
+        .mean()
+        .reset_index()
+    )
+
+    if experience_chart_data.empty:
+        return html.P("No data available.")
+
+    # Create Altair Bar Chart
+    experience_chart = alt.Chart(experience_chart_data).mark_bar().encode(
+        x=alt.X("salary_in_usd:Q", title="Average Salary (USD)"),
+        y=alt.Y("experience_level:N", title="Experience Level", sort="-x"),
+        tooltip=["experience_level", "salary_in_usd"]
+    ).properties(
+        width=600,
+        height=200
+    )
+
+    return experience_chart.to_dict()
+
 
 # Run the app
 if __name__ == '__main__':
