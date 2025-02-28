@@ -34,9 +34,8 @@ app.layout = dbc.Container([
 
         dbc.Col(html.Div([
             html.H4("Line Chart: Salary Over 4 Years", className="text-center"),
-            html.Div(id='line-chart', className="border p-3")  # Placeholder
-        ]), width=8),
-    ], className="mb-4"),
+            dvc.Vega(id='line-chart', className="border p-3")
+        ]), width=8)]),
 
     # Static Charts
     dbc.Row([
@@ -116,7 +115,7 @@ def set_employment_type_options(_):
 # Callback to update the card and line chart based on the results of filters
 @app.callback(
 	Output('filtered-average-salary', 'children'),
-    Output('line-chart', 'children'),
+    Output('line-chart', 'spec'),
     Input('company-location', 'value'),
     Input('experience-level', 'value'),
     Input('employment-type', 'value')
@@ -148,12 +147,11 @@ def update_dashboard(location, experience, employment):
         y=alt.Y("salary_in_usd:Q", title="Average Salary (USD)"),
         tooltip=["work_year", "salary_in_usd"]
     ).properties(
-        title="Salary Trend Over 4 Years",
-        width=600,
-        height=400
-    ).interactive().to_dict()
+        width=800,
+        height=100
+    ).interactive()
 
-    return avg_salary_text, line_chart
+    return avg_salary_text, line_chart.to_dict()
 
 # Run the app
 if __name__ == '__main__':
