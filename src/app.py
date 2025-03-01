@@ -45,7 +45,7 @@ app.layout = dbc.Container([
 
         dbc.Col(
             html.Div([
-                html.H4("Line Chart: Salary Over 4 Years", className="text-center"),
+                html.H4("Salary Over 4 Years", className="text-center"),
                 dvc.Vega(id='line-chart', className="border p-3")
             ]), width=8
         )
@@ -64,7 +64,7 @@ app.layout = dbc.Container([
         ]), width=6),
         
         dbc.Col(html.Div([
-            html.H4("Overall Top 10 Job Title by Salary", className="text-center"),
+            html.H4("Overall Salary by Top 10 Job Title", className="text-center"),
             dvc.Vega(id='bar-job-title', className="border p-3")  # Placeholder
         ]), width=6),
 
