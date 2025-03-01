@@ -25,36 +25,48 @@ app.layout = dbc.Container([
 
     # Filtered Charts: Salary Card & Line Chart
     dbc.Row([
-        dbc.Col(dbc.Card([
-            dbc.CardBody([
-                html.H4("Average Salary (Filtered)", className="card-title"),
-                html.H2(id='filtered-average-salary', className="card-text"),
-            ])
-        ], className="shadow p-3"), width=4),
+        dbc.Col([
+            dbc.Card([            
+                dbc.CardBody([
+                    html.H4("Average Salary (Filtered)", className="card-title"),
+                    html.H2(id='filtered-average-salary', className="card-text"),
+                ])
+                ], className="shadow p-3"
+            ), 
+            dbc.Card([            
+                dbc.CardBody([
+                    html.H4("Overall Average Salary", className="card-title"),
+                    html.H2(id='overall-average-salary', className="card-text"),
+                ])
+                ], className="shadow p-3"
+            )],
+            width=4
+        ),
 
-        dbc.Col(html.Div([
-            html.H4("Line Chart: Salary Over 4 Years", className="text-center"),
-            dvc.Vega(id='line-chart', className="border p-3")
-        ]), width=8)]),
+        dbc.Col(
+            html.Div([
+                html.H4("Line Chart: Salary Over 4 Years", className="text-center"),
+                dvc.Vega(id='line-chart', className="border p-3")
+            ]), width=8,height=4
+        )
+    ]),
 
     # Static Charts
     dbc.Row([
-        dbc.Col(dbc.Card([
-            dbc.CardBody([
-                html.H4("Overall Average Salary", className="card-title"),
-                html.H2(id='overall-average-salary', className="card-text"),
-            ])
-        ], className="shadow p-3"), width=4),
+        #dbc.Col(
+            #dbc.Card([
+            
+        #], className="shadow p-3"), width=4),
 
         dbc.Col(html.Div([
             html.H4("Overall Salary by Company Size", className="text-center"),
-            html.Div(id='bar-company-size', className="border p-3")  # Placeholder
-        ]), width=4),
+            dvc.Vega(id='bar-company-size', className="border p-3")  # Placeholder
+        ]), width=6),
         
         dbc.Col(html.Div([
             html.H4("Overall Top 10 Job Title by Salary", className="text-center"),
-            html.Div(id='bar-job-title', className="border p-3")  # Placeholder
-        ]), width=4),
+            dvc.Vega(id='bar-job-title', className="border p-3")  # Placeholder
+        ]), width=6),
     ], className="mb-4"),
 
     dbc.Row([
@@ -208,6 +220,45 @@ def update_bar_chart_experience_level(_):
     )
 
     return experience_chart.to_dict()
+
+# Overall Salary by Company Size
+
+@app.callback(
+    Output('bar-company-size',"spec"),
+    Input('bar-company-size','id')
+)
+def show_salary_by_size_bar(_):
+    salary_by_size = data.groupby('company_size')['salary_in_usd'].mean().reset_index()
+    
+    size_bar_chart = alt.Chart(salary_by_size).mark_bar().encode(
+        x=alt.X("salary_in_usd:Q",title = "Average Salary (USD)"),
+        y=alt.Y("company_size:N",title = "Company Size",sort="-x"),
+        tooltip=["company_size", "salary_in_usd"]
+    ).properties(
+        width=600,
+        height=200
+    )
+    return size_bar_chart.to_dict()
+    
+
+# Overall Top 10 Job Title by Salary
+@app.callback(
+    Output('bar-job-title',"spec"),
+    Input('bar-job-title','id')
+)
+def show_salary_by_title(_):
+    salary_by_title = data.groupby('job_title')['salary_in_usd'].mean().reset_index()
+
+    title_bar_chart = alt.Chart(salary_by_title).mark_bar().encode(
+        x=alt.X("salary_in_usd:Q",title = "Average Salary (USD)"),
+        y=alt.Y("job_title:N",title = "Job Title",sort="-x"),
+        tooltip=["job_title", "salary_in_usd"]
+    ).properties(
+        width=600,
+        height=200
+    )
+    return title_bar_chart.to_dict()
+
 
 
 # Run the app
