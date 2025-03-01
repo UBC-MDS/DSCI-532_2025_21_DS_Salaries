@@ -14,6 +14,9 @@ Our goal is to create an easy-to-use, interactive dashboard that enables job see
 ## Usage
 
 ### Demo GIF
+Take a look at our demo:
+
+![Demo Animation](img/demo.gif)
 
 ### Dashboard
 Try the live demo::
