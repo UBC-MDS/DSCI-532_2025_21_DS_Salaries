@@ -47,7 +47,7 @@ app.layout = dbc.Container([
             html.Div([
                 html.H4("Line Chart: Salary Over 4 Years", className="text-center"),
                 dvc.Vega(id='line-chart', className="border p-3")
-            ]), width=8,height=4
+            ]), width=8
         )
     ]),
 
