@@ -83,7 +83,18 @@ app.layout = dbc.Container([
         
     ], className="mb-4"),
 
+    # description
 
+    html.H1(' '),
+    html.P('The Salary Dashboard provides an interactive analysis of Data Science job salaries. The dashboard highlights average salaries while enabling dynamic exploration of salary trends across different roles and employment structures. Users can gain insights into job market patterns, helping them compare salaries and make informed career decisions.'),
+    html.P("Author: Zhengling Jiang, Kexin Shi, Jingyuan Wang, Tengwei Wang"),
+    html.A(
+        "Github repo",
+        href="https://github.com/UBC-MDS/DSCI-532_2025_21_DS_Salaries",
+        target="_blank"  # Opens in a new tab
+    ),
+    html.P("Latest update on March 1, 2025.")
+    
 ], fluid=True)
 
 # Calculate the overall average salary
