@@ -67,6 +67,7 @@ app.layout = dbc.Container([
             html.H4("Overall Top 10 Job Title by Salary", className="text-center"),
             dvc.Vega(id='bar-job-title', className="border p-3")  # Placeholder
         ]), width=6),
+
     ], className="mb-4"),
 
     dbc.Row([
@@ -220,6 +221,7 @@ def update_bar_chart_experience_level(_):
     )
 
     return experience_chart.to_dict()
+
 
 # Overall Salary by Company Size
 

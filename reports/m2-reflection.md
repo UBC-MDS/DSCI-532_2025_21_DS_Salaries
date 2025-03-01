@@ -1,18 +1,44 @@
 # Which parts of your proposal/sketch you have implemented in your dashboard so far and explain what is not yet implemented.
 
-We implemented all of the required inputs and output components in our dashboard. However, we made some changes to the visualization choices, which is explained below.
+We have successfully implemented all the required input and output components outlined in our proposal. However, we made some adjustments to the visualization choices based on usability considerations, data characteristics, and effectiveness in conveying insights. These changes are detailed below.
 
-# What you have done differently than in your proposal/sketch explain why (e.g. implementation difficulty, explanation for why the new approach is more effective, etc).
+# Changes from Proposal and Justification
 
-- Instead of all of the four filters of Experience Level, Employment Type, Job Title and Compnay Location, we excluded Job Title as a filter input in our dashboard. Since the Job Title contains about 3000 different names in the dataset, it is difficult for users to find the exact one they have. Also, we find the Salary By Job Title chart in our original proposal is redundant since there are too many different names. Thus, we decided to use a sorted bar chart of the top 10 job titles by salary to deliver the information about job title information. A sorted bar chart is more effective since it gives the job seekers to have a better understanding of what kind of job titles may have higher salary which helps them to make better decision.
-- Instead of using a pie chart of Salary by Experience Level, we used a ranked bar chart to deliver the similar information. It effectively helps users to find out how experience level gonna affect their salary, while the pie chart cannot show such information and it only gives user a sense of the proportion of people by experience level .
-- Since we already have a bar chart of salary by employment type, we don't need the pie chart to show the same information. Thus, we removed it.
-- We added two new graphs to the dashboard. One is the Average Salary card and one is a line chart of salary by years. Both of them can be filtered by Experience Level, Employment Type and Company Location. It effectively shows how the average salary changes over years and help them to see whether the salary is expected by them.
+## Removal of Job Title as a Filter
 
-# Do you have anything that is not working in your dashboard? Identify them so that we can distinguish between features in development and bugs.
+Initially, we planned to include Experience Level, Employment Type, Job Title, and Company Location as filters. However, we removed Job Title due to its high cardinality (over 3,000 unique titles).
+Users would struggle to locate their exact job title in a dropdown list, making it an inefficient filter. Instead, we introduced a sorted bar chart displaying the top 10 job titles by salary, providing a clearer, more actionable insight for job seekers to assess which titles tend to have higher salaries.
 
-No.
+## Bar Chart Instead of Pie Chart for Salary by Experience Level
 
-# What you think your dashboard does well currently? what its limitations are? What are good potential future improvements and additions?
+Our original design included a pie chart for Salary by Experience Level, but we found that it was not effective in showing salary differences across levels. A ranked bar chart was used instead, as it better highlights how experience level impacts salary rather than just showing proportions.
 
-Our dashboard effectively included most of the information that the Data Science job seeker may want to know such as the salary changes by year, how different indicators may affect the salary (e.g. employment type, job title, company size, experience level). However, the limitation is that we only have 4 years data (2020-2023), which makes the dataset not efficient to show the salary changes by year. In the future, we may add more data into the dataset.
+## Removal of Pie Chart for Salary by Employment Type
+
+Since we already have a bar chart visualizing Salary by Employment Type, the proposed pie chart was redundant. The bar chart provides a more meaningful salary comparison across employment types.
+
+## Addition of Two New Visualizations
+
+We introduced two additional visualizations that were not in our original proposal:
+- Average Salary Card: Displays the filtered average salary dynamically, giving users immediate insight into salary trends.
+- Line Chart for Salary Trends Over Time: Shows how salaries have changed from 2020 to 2023, filtered by Experience Level, Employment Type, and Company Location. This helps users assess salary progression over the years and align their expectations.
+
+# Known Issues or Bugs
+
+Currently, all dashboard functionalities are working as expected, and there are no known bugs or incomplete features.
+
+# Strengths, Limitations, and Future Improvements
+
+## What Our Dashboard Does Well
+Provides comprehensive salary insights for Data Science job seekers, helping them assess:
+- Salary trends over time. 
+- The impact of employment type, company size, and experience level on salaries. 
+- Which job titles tend to have the highest salaries.
+- Uses effective and interactive visualizations to enhance user experience.
+
+## Limitations and Future Enhancements
+- The dataset only covers four years (2020-2023), limiting the long-term salary trend analysis.
+    - Future Improvement: Incorporate newer salary data to provide a more complete salary evolution trend.
+
+- Currently, the bar charts remain static, meaning users cannot interact with them beyond filtering other elements.
+    - Future Improvement: Consider interactive sorting or drill-down capabilities to make the bar charts more dynamic.
