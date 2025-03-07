@@ -4,6 +4,8 @@ from dash import Dash, dcc, html, callback, Output, Input
 import pandas as pd 
 import altair as alt
 import dash_vega_components as dvc
+import plotly.express as px
+
 
 # Initialize Dash app with Bootstrap
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -12,9 +14,24 @@ server = app.server
 # Read processed data
 data = pd.read_csv('data/processed/salaries.csv')
 
-# Define app layout
-app.layout = dbc.Container([
-    html.H1("Data Science Salaries Tracker", className="text-center my-4"),  # Title
+# Precompute salary ranges
+def compute_salary_ranges(df):
+    bins = [0, 50000, 100000, 150000, 200000, df["salary_in_usd"].max()]  
+    labels = ["<50K", "50K-100K", "100K-150K", "150K-200K", ">200K"] 
+    df["salary_range"] = pd.cut(df["salary_in_usd"], bins=bins, labels=labels, include_lowest=True)
+    return df
+
+data = compute_salary_ranges(data)
+
+# Map Page Layout
+map_layout = html.Div([
+    html.H2("Salary Distribution Map", className="text-center my-4"),
+    
+    dcc.Graph(id="salary-map") 
+])
+
+# Dashboard page layout
+dashboard_layout = dbc.Container([
     
     # Filters
     dbc.Row([
@@ -96,6 +113,71 @@ app.layout = dbc.Container([
     html.P("Latest update on March 1, 2025.")
     
 ], fluid=True)
+
+# Define App Layout (Navigation + Page Content)
+app.layout = dbc.Container([
+    # Top Section: Title & Navigation Buttons (Fixed)
+    dbc.Row([
+        dbc.Col(html.H1("Data Science Salaries Tracker", className="my-2"), width="auto"), 
+        dbc.Col(
+            dbc.ButtonGroup([
+                dbc.Button("Analytics Page", id="btn-dashboard", color="primary", className="me-2 px-4 py-2"),
+                dbc.Button("Map Page", id="btn-map", color="primary", className="px-4 py-2")  
+            ], className="ml-auto"), width="auto", className="d-flex align-items-center ms-3"
+        )
+    ], className="d-flex align-items-center mb-4"),
+
+    # Main Content (Changes with Page)
+    html.Div(id="page-content")
+], fluid=True)
+
+# Callback to handle page navigation
+@app.callback(
+    Output("page-content", "children"),
+    [Input("btn-dashboard", "n_clicks"),
+     Input("btn-map", "n_clicks")]
+)
+def display_page(btn_dashboard, btn_map):
+    ctx = dash.callback_context
+
+    # Default Page
+    if not ctx.triggered:
+        return dashboard_layout
+    button_id = ctx.triggered[0]["prop_id"].split(".")[0]
+
+    if button_id == "btn-map":
+        return map_layout
+    else:
+        return dashboard_layout
+    
+# Callback to Generate the Map
+@app.callback(
+    Output("salary-map", "figure"),
+    Input("salary-map", "id")  # Dummy input to trigger rendering
+)
+def generate_salary_map(_):
+
+    if "company_location" not in data.columns or "salary_in_usd" not in data.columns:
+        return px.scatter_mapbox(title="No Data Available")
+
+    # Compute average salary per region
+    avg_salary_by_location = data.groupby("company_location")["salary_in_usd"].mean().reset_index()
+
+    # Choropleth Map
+    fig = px.choropleth(
+        avg_salary_by_location,
+        locations="company_location", 
+        locationmode="country names", 
+        color="salary_in_usd",
+        color_continuous_scale="Viridis",
+        title="Average Salary by Company Location",
+        labels={"salary_in_usd": "Average Salary (USD)"},
+    )
+
+    fig.update_geos(showcoastlines=True, showland=True, fitbounds="locations")
+    fig.update_layout(margin={"r":0,"t":50,"l":0,"b":0})
+
+    return fig
 
 # Calculate the overall average salary
 overall_avg_salary = data['salary_in_usd'].mean()
@@ -271,7 +353,6 @@ def show_salary_by_title(_):
         height=200
     )
     return title_bar_chart.to_dict()
-
 
 
 # Run the app
