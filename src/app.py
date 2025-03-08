@@ -40,7 +40,7 @@ dashboard_layout = dbc.Container([
         dbc.Col(dcc.Dropdown(id='employment-type', options=[], placeholder="Select Employment Type"), width=4),
     ], className="mb-4"),
 
-    # Filtered Charts: Salary Card & Line Chart
+    # Salary Card & Line Chart
     dbc.Row([
         dbc.Col([
             dbc.Card([            
@@ -68,7 +68,7 @@ dashboard_layout = dbc.Container([
         )
     ]),
 
-    # Static Charts
+    # Bar charts
     dbc.Row([
         #dbc.Col(
             #dbc.Card([
@@ -218,7 +218,7 @@ def set_employment_type_options(_):
     unique_employment_types = sorted(data['employment_type'].dropna().unique())
     return [{'label': emp_type, 'value': emp_type} for emp_type in unique_employment_types]
 
-# Callback to update the card and line chart based on the results of filters
+# Callback to update the card, line charts based on the results of filters
 @app.callback(
 	Output('filtered-average-salary', 'children'),
     Output('line-chart', 'spec'),
@@ -239,7 +239,7 @@ def update_dashboard(location, experience, employment):
 
     # Calculate average salary based on the outputs of filters
     avg_salary = filtered_df["salary_in_usd"].mean()
-    avg_salary_text = f"${avg_salary:,.2f}" if not pd.isna(avg_salary) else "N/A"
+    avg_salary_text = f"${avg_salary:,.0f}" if not pd.isna(avg_salary) else "N/A"
 
     # generate line chart
     line_chart_data = (
@@ -250,7 +250,9 @@ def update_dashboard(location, experience, employment):
 
     line_chart = alt.Chart(line_chart_data).mark_line(point=True).encode(
         x=alt.X("work_year:O", title="Year"),
-        y=alt.Y("salary_in_usd:Q", title="Average Salary (USD)"),
+        y=alt.Y("salary_in_usd:Q", title="Avg Salary (USD)",
+                scale=alt.Scale(nice=True),
+                axis=alt.Axis(format="$~s")),
         tooltip=["work_year", "salary_in_usd"]
     ).properties(
         width=800,
@@ -259,45 +261,68 @@ def update_dashboard(location, experience, employment):
 
     return avg_salary_text, line_chart.to_dict()
 
-# Callback to generate the Bar Chart for Salary by Employment Type (Unfiltered)
+# Callback to update the employment_type Bar Chart based on the results of filters
 @app.callback(
     Output('bar-employment-type', 'spec'),
-    Input('bar-employment-type', 'id')  # Dummy trigger
+    Input('company-location', 'value'),
+    Input('experience-level', 'value'),
+    Input('employment-type', 'value')
 )
-def update_bar_chart_employment_type(_):
-    # Aggregate: Overall average salary by employment type
+def update_bar_chart_employment_type(location, experience, employment):
+    # Filter
+    filtered_df = data.copy()
+    
+    if location:
+        filtered_df = filtered_df[filtered_df["company_location"] == location]
+    if experience:
+        filtered_df = filtered_df[filtered_df["experience_level"] == experience]
+    if employment:
+        filtered_df = filtered_df[filtered_df["employment_type"] == employment]
+
+    # Calculate average salary based on the outputs of filters
     employment_chart_data = (
-        data.groupby("employment_type")["salary_in_usd"]
-        .mean()
-        .reset_index()
+        filtered_df.groupby("employment_type", as_index=False)["salary_in_usd"].mean()
     )
 
-    if employment_chart_data.empty:
+    if employment_chart_data .empty:
         return html.P("No data available.")
 
     # Create Altair Bar Chart
     employment_chart = alt.Chart(employment_chart_data).mark_bar().encode(
-        x=alt.X("salary_in_usd:Q", title="Average Salary (USD)"),
+        x=alt.X("salary_in_usd:Q",
+                title="Average Salary (K USD)", 
+                scale=alt.Scale(domain=[0, employment_chart_data["salary_in_usd"].max()]),  
+                axis=alt.Axis(format="~s")),
         y=alt.Y("employment_type:N", title="Employment Type", sort="-x"),
         tooltip=["employment_type", "salary_in_usd"]
     ).properties(
-        width=600,
+        width=500,
         height=200
     )
 
     return employment_chart.to_dict()
 
-# Callback to generate the Bar Chart for Salary by Experience Level (Unfiltered)
+# Callback to update the Bar Chart for Salary by Experience Level based on the filter results
 @app.callback(
     Output('bar-experience-level', 'spec'),
-    Input('bar-experience-level', 'id')  # Dummy trigger
+    Input('company-location', 'value'),
+    Input('experience-level', 'value'),
+    Input('employment-type', 'value')
 )
-def update_bar_chart_experience_level(_):
-    # Aggregate: Overall average salary by experience level
+def update_bar_chart_experience_level(location, experience, employment):
+    # Filter
+    filtered_df = data.copy()
+    
+    if location:
+        filtered_df = filtered_df[filtered_df["company_location"] == location]
+    if experience:
+        filtered_df = filtered_df[filtered_df["experience_level"] == experience]
+    if employment:
+        filtered_df = filtered_df[filtered_df["employment_type"] == employment]
+
+    # Calculate average salary based on the outputs of filters
     experience_chart_data = (
-        data.groupby("experience_level")["salary_in_usd"]
-        .mean()
-        .reset_index()
+        filtered_df.groupby("experience_level", as_index=False)["salary_in_usd"].mean()
     )
 
     if experience_chart_data.empty:
@@ -305,51 +330,99 @@ def update_bar_chart_experience_level(_):
 
     # Create Altair Bar Chart
     experience_chart = alt.Chart(experience_chart_data).mark_bar().encode(
-        x=alt.X("salary_in_usd:Q", title="Average Salary (USD)"),
+        x=alt.X("salary_in_usd:Q",
+                title="Average Salary (K USD)", 
+                scale=alt.Scale(domain=[0, experience_chart_data["salary_in_usd"].max()]),  
+                axis=alt.Axis(format="~s")),
         y=alt.Y("experience_level:N", title="Experience Level", sort="-x"),
         tooltip=["experience_level", "salary_in_usd"]
     ).properties(
-        width=600,
+        width=500,
         height=200
     )
 
     return experience_chart.to_dict()
 
 
-# Overall Salary by Company Size
+# Callback to generate the Salary by Company Size based on filter results
 
 @app.callback(
     Output('bar-company-size',"spec"),
-    Input('bar-company-size','id')
+    Input('company-location', 'value'),
+    Input('experience-level', 'value'),
+    Input('employment-type', 'value')
 )
-def show_salary_by_size_bar(_):
-    salary_by_size = data.groupby('company_size')['salary_in_usd'].mean().reset_index()
+def show_salary_by_size_bar(location, experience, employment):
+    # Filter
+    filtered_df = data.copy()
     
+    if location:
+        filtered_df = filtered_df[filtered_df["company_location"] == location]
+    if experience:
+        filtered_df = filtered_df[filtered_df["experience_level"] == experience]
+    if employment:
+        filtered_df = filtered_df[filtered_df["employment_type"] == employment]
+
+    # Calculate average salary based on the outputs of filters
+    salary_by_size = (
+        filtered_df.groupby("company_size", as_index=False)["salary_in_usd"].mean()
+    )
+
+    if salary_by_size.empty:
+        return html.P("No data available.")
+    
+     # Create Altair Bar Chart
     size_bar_chart = alt.Chart(salary_by_size).mark_bar().encode(
-        x=alt.X("salary_in_usd:Q",title = "Average Salary (USD)"),
+        x=alt.X("salary_in_usd:Q",
+                title="Average Salary (K USD)", 
+                scale=alt.Scale(domain=[0, salary_by_size["salary_in_usd"].max()]),  
+                axis=alt.Axis(format="~s")),
         y=alt.Y("company_size:N",title = "Company Size",sort="-x"),
         tooltip=["company_size", "salary_in_usd"]
     ).properties(
-        width=600,
+        width=500,
         height=200
     )
     return size_bar_chart.to_dict()
     
 
-# Overall Top 10 Job Title by Salary
+# Callback to generate bar chart for Overall Top 10 Job Title by Salary based on filtered results
 @app.callback(
     Output('bar-job-title',"spec"),
-    Input('bar-job-title','id')
+    Input('company-location', 'value'),
+    Input('experience-level', 'value'),
+    Input('employment-type', 'value')
 )
-def show_salary_by_title(_):
-    salary_by_title = data.groupby('job_title')['salary_in_usd'].mean().reset_index()
+def show_salary_by_title(location, experience, employment):
+     # Filter
+    filtered_df = data.copy()
+    
+    if location:
+        filtered_df = filtered_df[filtered_df["company_location"] == location]
+    if experience:
+        filtered_df = filtered_df[filtered_df["experience_level"] == experience]
+    if employment:
+        filtered_df = filtered_df[filtered_df["employment_type"] == employment]
 
-    title_bar_chart = alt.Chart(salary_by_title).mark_bar().encode(
-        x=alt.X("salary_in_usd:Q",title = "Average Salary (USD)"),
+    # Calculate average salary based on the outputs of filters and choose top 10
+    salary_by_title = (
+        filtered_df.groupby("job_title", as_index=False)["salary_in_usd"].mean()
+    )
+
+    if salary_by_title.empty:
+        return html.P("No data available.")
+
+    top10_salary_by_title = salary_by_title.nlargest(10, "salary_in_usd")
+
+    title_bar_chart = alt.Chart(top10_salary_by_title).mark_bar().encode(
+        x=alt.X("salary_in_usd:Q",
+                title="Average Salary (K USD)", 
+                scale=alt.Scale(domain=[0, top10_salary_by_title["salary_in_usd"].max()]),  
+                axis=alt.Axis(format="~s")),
         y=alt.Y("job_title:N",title = "Job Title",sort="-x"),
         tooltip=["job_title", "salary_in_usd"]
     ).properties(
-        width=600,
+        width=500,
         height=200
     )
     return title_bar_chart.to_dict()
