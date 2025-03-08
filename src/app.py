@@ -239,7 +239,7 @@ def update_dashboard(location, experience, employment):
 
     # Calculate average salary based on the outputs of filters
     avg_salary = filtered_df["salary_in_usd"].mean()
-    avg_salary_text = f"${avg_salary:,.2f}" if not pd.isna(avg_salary) else "N/A"
+    avg_salary_text = f"${avg_salary:,.0f}" if not pd.isna(avg_salary) else "N/A"
 
     # generate line chart
     line_chart_data = (
