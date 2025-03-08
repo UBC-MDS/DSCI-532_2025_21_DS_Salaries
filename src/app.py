@@ -250,7 +250,7 @@ def update_dashboard(location, experience, employment):
 
     line_chart = alt.Chart(line_chart_data).mark_line(point=True).encode(
         x=alt.X("work_year:O", title="Year"),
-        y=alt.Y("salary_in_usd:Q", title="Avg Salary (USD)",
+        y=alt.Y("salary_in_usd:Q",
                 scale=alt.Scale(nice=True),
                 axis=alt.Axis(format="$~s")),
         tooltip=["work_year", "salary_in_usd"]
@@ -293,7 +293,7 @@ def update_bar_chart_employment_type(location, experience, employment):
                 title="Average Salary (K USD)", 
                 scale=alt.Scale(domain=[0, employment_chart_data["salary_in_usd"].max()]),  
                 axis=alt.Axis(format="~s")),
-        y=alt.Y("employment_type:N", title="Employment Type", sort="-x"),
+        y=alt.Y("employment_type:N", sort="-x"),
         tooltip=["employment_type", "salary_in_usd"]
     ).properties(
         width=500,
@@ -334,7 +334,7 @@ def update_bar_chart_experience_level(location, experience, employment):
                 title="Average Salary (K USD)", 
                 scale=alt.Scale(domain=[0, experience_chart_data["salary_in_usd"].max()]),  
                 axis=alt.Axis(format="~s")),
-        y=alt.Y("experience_level:N", title="Experience Level", sort="-x"),
+        y=alt.Y("experience_level:N", sort="-x"),
         tooltip=["experience_level", "salary_in_usd"]
     ).properties(
         width=500,
@@ -377,7 +377,7 @@ def show_salary_by_size_bar(location, experience, employment):
                 title="Average Salary (K USD)", 
                 scale=alt.Scale(domain=[0, salary_by_size["salary_in_usd"].max()]),  
                 axis=alt.Axis(format="~s")),
-        y=alt.Y("company_size:N",title = "Company Size",sort="-x"),
+        y=alt.Y("company_size:N",sort="-x"),
         tooltip=["company_size", "salary_in_usd"]
     ).properties(
         width=500,
@@ -419,7 +419,7 @@ def show_salary_by_title(location, experience, employment):
                 title="Average Salary (K USD)", 
                 scale=alt.Scale(domain=[0, top10_salary_by_title["salary_in_usd"].max()]),  
                 axis=alt.Axis(format="~s")),
-        y=alt.Y("job_title:N",title = "Job Title",sort="-x"),
+        y=alt.Y("job_title:N",sort="-x"),
         tooltip=["job_title", "salary_in_usd"]
     ).properties(
         width=500,
