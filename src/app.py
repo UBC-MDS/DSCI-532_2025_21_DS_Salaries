@@ -123,7 +123,7 @@ dashboard_layout = dbc.Container([
     # Salary Card & Line Chart
     dbc.Row([
         html.Div([
-            html.H4("Salary Over 4 Years", className="text-center"),
+            html.H4("Average Salary Over 4 Years", className="text-center"),
             dvc.Vega(id='line-chart', className="border p-3")
         ])
     ]),
@@ -136,12 +136,12 @@ dashboard_layout = dbc.Container([
         #], className="shadow p-3"), width=4),
 
         dbc.Col(html.Div([
-            html.H4("Overall Salary by Company Size", className="text-center"),
+            html.H4("Average Salary by Company Size", className="text-center"),
             dvc.Vega(id='bar-company-size', className="border p-3")  # Placeholder
         ]), width=6),
         
         dbc.Col(html.Div([
-            html.H4("Overall Salary by Top 10 Job Title", className="text-center"),
+            html.H4("Average Salary by Top 10 Job Title", className="text-center"),
             dvc.Vega(id='bar-job-title', className="border p-3")  # Placeholder
         ]), width=6),
 
@@ -149,12 +149,12 @@ dashboard_layout = dbc.Container([
 
     dbc.Row([
         dbc.Col(html.Div([
-            html.H4("Overall Salary by Employment Type", className="text-center"),
+            html.H4("Average Salary by Employment Type", className="text-center"),
             dvc.Vega(id='bar-employment-type', className="border p-3")
             ]), width=6),
         
         dbc.Col(html.Div([
-            html.H4("Overall Salary by Experience Level", className="text-center"),
+            html.H4("Average Salary by Experience Level", className="text-center"),
             dvc.Vega(id='bar-experience-level', className="border p-3")
         ]), width=6),
         
@@ -323,7 +323,7 @@ def update_dashboard(location, experience, employment):
         x=alt.X("work_year:O", title="Year"),
         y=alt.Y("salary_in_usd:Q",
                 scale=alt.Scale(nice=True),
-                axis=alt.Axis(format="$~s")),
+                axis=alt.Axis(format="$~s", title=None)),
         tooltip=["work_year", "salary_in_usd"]
     ).properties(
         width=800,
@@ -364,10 +364,10 @@ def update_bar_chart_employment_type(location, experience, employment):
                 title="Average Salary (K USD)", 
                 scale=alt.Scale(domain=[0, employment_chart_data["salary_in_usd"].max()]),  
                 axis=alt.Axis(format="~s")),
-        y=alt.Y("employment_type:N", sort="-x"),
+        y=alt.Y("employment_type:N", sort="-x", axis=alt.Axis(title=None)),
         tooltip=["employment_type", "salary_in_usd"]
     ).properties(
-        width=500,
+        width=350,
         height=200
     )
 
@@ -405,10 +405,10 @@ def update_bar_chart_experience_level(location, experience, employment):
                 title="Average Salary (K USD)", 
                 scale=alt.Scale(domain=[0, experience_chart_data["salary_in_usd"].max()]),  
                 axis=alt.Axis(format="~s")),
-        y=alt.Y("experience_level:N", sort="-x"),
+        y=alt.Y("experience_level:N", sort="-x", axis=alt.Axis(title=None)),
         tooltip=["experience_level", "salary_in_usd"]
     ).properties(
-        width=500,
+        width=350,
         height=200
     )
 
@@ -448,10 +448,10 @@ def show_salary_by_size_bar(location, experience, employment):
                 title="Average Salary (K USD)", 
                 scale=alt.Scale(domain=[0, salary_by_size["salary_in_usd"].max()]),  
                 axis=alt.Axis(format="~s")),
-        y=alt.Y("company_size:N",sort="-x"),
+        y=alt.Y("company_size:N",sort="-x", axis=alt.Axis(title=None)),
         tooltip=["company_size", "salary_in_usd"]
     ).properties(
-        width=500,
+        width=350,
         height=200
     )
     return size_bar_chart.to_dict()
@@ -490,10 +490,10 @@ def show_salary_by_title(location, experience, employment):
                 title="Average Salary (K USD)", 
                 scale=alt.Scale(domain=[0, top10_salary_by_title["salary_in_usd"].max()]),  
                 axis=alt.Axis(format="~s")),
-        y=alt.Y("job_title:N",sort="-x"),
+        y=alt.Y("job_title:N",sort="-x", axis=alt.Axis(title=None)),
         tooltip=["job_title", "salary_in_usd"]
     ).properties(
-        width=500,
+        width=350,
         height=200
     )
     return title_bar_chart.to_dict()
