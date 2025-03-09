@@ -5,11 +5,30 @@
 ### Author: Zhengling Jiang, Kexin Shi, Jingyuan Wang, Tengwei Wang
 
 ## Summary
-Choosing a career in data science can be challenging, especially when it comes to understanding salary expectations across different job titles, locations, and experience levels. To address this challenge, we propose building a data visualization app that allows users to explore salary trends in the data science field. Our app will present salary distributions based on factors such as company size, experience level, and geographical location. Users will be able to filter, sort, and compare different variables to identify trends and better understand what factors contribute to higher salaries in data science.
+Choosing a career in data science can be challenging, especially when it comes to understanding salary expectations across different job titles, locations, and experience levels. To address this challenge, we propose building a data visualization app that allows users to explore salary trends in the data science field. Our app will present salary distributions based on factors such as company size, experience level, and geographical location. 
+
+Users can:
+- Filter, sort, and compare salary trends for different roles.
+- Gain insights into which factors contribute to higher salaries in data science.
+- View data-driven salary distributions across different locations.
 
 ## Motivation
 Our goal is to create an easy-to-use, interactive dashboard that enables job seekers, students, and industry professionals to explore salary trends visually and understand the key factors influencing pay.
 
+## Features of the Dashboard
+### Visualizations
+Our dashboard includes the following interactive visualizations:
+- Salary Trends Over Time: View salary changes across the past 4 years.
+- Salary Distribution Map: A geographical choropleth map showing average salaries by country.
+- Salaries by Company Size: Compare how salaries differ across small, medium, and large companies.
+- Salaries by Employment Type: Compare how salaries differ across Full-time, Part-time, Contract, and Freelance jobs.
+- Salaries by Experience Level: Analyze how salaries vary between Entry-level, Mid-level, Senior, and Executive roles.
+- Salaries by Top 10 Job Titles: Analyze how salaries vary across the 10 most frequently occurring job titles.
+
+### Interactive Features
+- Filters for Custom Analysis: Filter data by Company Location, Experience Level, and Employment Type.
+- Responsive and Dynamic Charts: Click on filters to dynamically update the charts.
+- Geographical Insights: Explore salary variations across different countries.
 
 ## Usage
 
