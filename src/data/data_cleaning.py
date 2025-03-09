@@ -44,6 +44,15 @@ data['job_title'] = data['job_title'].apply(lambda x: x if x in top_10_jobs else
 
 print(data['job_title'].value_counts())
 
+def compute_salary_ranges(df):
+    bins = [0, 50000, 100000, 150000, 200000, df["salary_in_usd"].max()]  
+    labels = ["<50K", "50K-100K", "100K-150K", "150K-200K", ">200K"] 
+    df["salary_range"] = pd.cut(df["salary_in_usd"], bins=bins, labels=labels, include_lowest=True)
+    return df
+
+# Apply salary range computation
+data = compute_salary_ranges(data)
+
 print(data.head())
 
 # Save processed data
