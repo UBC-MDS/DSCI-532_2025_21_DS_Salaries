@@ -1,7 +1,7 @@
 import pandas as pd
 import plotly.express as px
 from dash import Dash, dcc, html, callback, Output, Input
-from data.load_data import data
+from src.data.load_data import data  
 
 def register_map_callbacks(app):
     @app.callback(
