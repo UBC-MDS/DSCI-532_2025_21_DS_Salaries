@@ -1,14 +1,20 @@
 import dash
 import dash_bootstrap_components as dbc
 from dash import Dash, dcc, html, callback, Output, Input
-from callbacks.filters import register_filter_callbacks
-from callbacks.charts import register_chart_callbacks
-from callbacks.map import register_map_callbacks
-from components.sidebar import side_layout
-from components.charts import dashboard_layout
-from components.map import map_layout
+import sys
+import os
 
+# set relative path
+dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
+sys.path.append(dir)
+
+from src.callbacks.filters import register_filter_callbacks
+from src.callbacks.charts import register_chart_callbacks
+from src.callbacks.map import register_map_callbacks
+from src.components.sidebar import side_layout
+from src.components.charts import dashboard_layout
+from src.components.map import map_layout
 
 # Initialize Dash app with Bootstrap
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
