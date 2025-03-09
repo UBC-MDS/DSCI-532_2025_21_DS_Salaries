@@ -1,6 +1,5 @@
 import dash
 from dash import Dash, dcc, html, callback, Output, Input
-from data.load_data import data
 import pandas as pd
 import altair as alt
 from src.data.load_data import data  
