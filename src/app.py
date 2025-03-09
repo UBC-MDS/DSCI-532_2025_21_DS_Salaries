@@ -24,48 +24,108 @@ def compute_salary_ranges(df):
 data = compute_salary_ranges(data)
 
 # Map Page Layout
-map_layout = html.Div([
+map_layout = [
     html.H2("Salary Distribution Map", className="text-center my-4"),
     
     dcc.Graph(id="salary-map") 
+]
+
+
+
+# description
+des = html.Div([
+    html.H1(' '),
+    html.P('The Salary Dashboard provides an interactive analysis of Data Science job salaries. The dashboard highlights average salaries while enabling dynamic exploration of salary trends across different roles and employment structures. Users can gain insights into job market patterns, helping them compare salaries and make informed career decisions.'),
+    html.P("Author: Zhengling Jiang, Kexin Shi, Jingyuan Wang, Tengwei Wang"),
+    html.A(
+        "Github repo",
+        href="https://github.com/UBC-MDS/DSCI-532_2025_21_DS_Salaries",
+        target="_blank"  # Opens in a new tab
+    ),
+    html.P("Latest update on March 9, 2025.")
 ])
+
+
+
+side_layout = dbc.Container([
+    dbc.Row([
+        # title
+        dbc.Col(html.H1("Data Science Salaries Tracker", className="my-2"), width="auto")
+    ]),
+    dbc.Row([
+        html.H1(' ')
+    ]),
+        # button
+    dbc.Row([
+        dbc.Col(
+            dbc.ButtonGroup([
+                dbc.Button("Analytics Page", id="btn-dashboard", color="primary", className="me-2 px-4 py-2"),
+                dbc.Button("Map Page", id="btn-map", color="primary", className="px-4 py-2")  
+            ], className="ml-auto"), width="auto", className="d-flex align-items-center ms-3"
+        )
+    ], className="d-flex align-items-center mb-4"),
+    dbc.Row([
+        html.H1(' ')
+    ]),
+    dbc.Row([
+        html.H1(' ')
+    ]),
+    # card
+    dbc.Row([
+        dbc.Card([            
+            dbc.CardBody([
+                html.H4("Average Salary (Filtered)", className="card-title"),
+                html.H2(id='filtered-average-salary', className="card-text"),
+            ])
+            ], className="shadow p-3",style = {"color":"white","backgroundColor":"#343a40"}
+        ), 
+    ]),
+    dbc.Row([
+        html.H1(' ')
+    ]),
+    dbc.Row([
+        html.H1(' ')
+    ]),
+    # filter
+    dbc.Row([
+        dbc.Col(dcc.Dropdown(id='company-location', options=[], placeholder="Select Company Location"))
+    ], className="mb-4", style = {"color":"black"}),
+    dbc.Row([
+        dbc.Col(dcc.Dropdown(id='experience-level', options=[], placeholder="Select Experience Level"))
+    ], className="mb-4", style = {"color":"black"}),
+    dbc.Row([
+        dbc.Col(dcc.Dropdown(id='employment-type', options=[], placeholder="Select Employment Type"))
+    ], className="mb-4", style = {"color":"black"}),
+
+
+    dbc.Row([
+        html.H1(' ')
+    ]),
+    dbc.Row([
+        html.H1(' ')
+    ]),
+    dbc.Row([
+        html.H1(' ')
+    ]),
+    dbc.Row([
+        des
+    ])
+]
+
+,fluid = True)
+
+
 
 # Dashboard page layout
 dashboard_layout = dbc.Container([
-    
-    # Filters
-    dbc.Row([
-        dbc.Col(dcc.Dropdown(id='company-location', options=[], placeholder="Select Company Location"), width=4),
-        dbc.Col(dcc.Dropdown(id='experience-level', options=[], placeholder="Select Experience Level"), width=4),
-        dbc.Col(dcc.Dropdown(id='employment-type', options=[], placeholder="Select Employment Type"), width=4),
-    ], className="mb-4"),
+
 
     # Salary Card & Line Chart
     dbc.Row([
-        dbc.Col([
-            dbc.Card([            
-                dbc.CardBody([
-                    html.H4("Average Salary (Filtered)", className="card-title"),
-                    html.H2(id='filtered-average-salary', className="card-text"),
-                ])
-                ], className="shadow p-3"
-            ), 
-            dbc.Card([            
-                dbc.CardBody([
-                    html.H4("Overall Average Salary", className="card-title"),
-                    html.H2(id='overall-average-salary', className="card-text"),
-                ])
-                ], className="shadow p-3"
-            )],
-            width=4
-        ),
-
-        dbc.Col(
-            html.Div([
-                html.H4("Salary Over 4 Years", className="text-center"),
-                dvc.Vega(id='line-chart', className="border p-3")
-            ]), width=8
-        )
+        html.Div([
+            html.H4("Salary Over 4 Years", className="text-center"),
+            dvc.Vega(id='line-chart', className="border p-3")
+        ])
     ]),
 
     # Bar charts
@@ -98,38 +158,49 @@ dashboard_layout = dbc.Container([
             dvc.Vega(id='bar-experience-level', className="border p-3")
         ]), width=6),
         
-    ], className="mb-4"),
-
-    # description
-
-    html.H1(' '),
-    html.P('The Salary Dashboard provides an interactive analysis of Data Science job salaries. The dashboard highlights average salaries while enabling dynamic exploration of salary trends across different roles and employment structures. Users can gain insights into job market patterns, helping them compare salaries and make informed career decisions.'),
-    html.P("Author: Zhengling Jiang, Kexin Shi, Jingyuan Wang, Tengwei Wang"),
-    html.A(
-        "Github repo",
-        href="https://github.com/UBC-MDS/DSCI-532_2025_21_DS_Salaries",
-        target="_blank"  # Opens in a new tab
-    ),
-    html.P("Latest update on March 1, 2025.")
+    ], className="mb-4")
     
 ], fluid=True)
 
 # Define App Layout (Navigation + Page Content)
 app.layout = dbc.Container([
+
     # Top Section: Title & Navigation Buttons (Fixed)
     dbc.Row([
-        dbc.Col(html.H1("Data Science Salaries Tracker", className="my-2"), width="auto"), 
-        dbc.Col(
-            dbc.ButtonGroup([
-                dbc.Button("Analytics Page", id="btn-dashboard", color="primary", className="me-2 px-4 py-2"),
-                dbc.Button("Map Page", id="btn-map", color="primary", className="px-4 py-2")  
-            ], className="ml-auto"), width="auto", className="d-flex align-items-center ms-3"
+        dbc.Col([
+            side_layout
+            ], width = 3
+        ,style={
+            # 'display': 'flex',
+            #'flexDirection': 'column',  # Stack children vertically
+            #'position': 'fixed',  # Fix the sidebar on the left
+            'top': '0',  # Make sure it starts at the top of the page
+            'left': '0',  # Fix it to the left of the page
+            'minHeight': '100vh',  # Ensure the sidebar takes full height of the page
+            'overflowY': 'auto',  # Allow the sidebar to scroll if content exceeds viewport height
+            'padding-left': 10,
+            'color': 'white', 
+            'backgroundColor': "#343a40", 
+            "box-sizing": "border-box",  # Include padding and borders in element's total width and height
+        }
+        ),
+        dbc.Col([
+            # Main Content (Changes with Page)
+            html.Div(id="page-content")
+            ],width = 9
         )
-    ], className="d-flex align-items-center mb-4"),
+    ])
 
-    # Main Content (Changes with Page)
-    html.Div(id="page-content")
 ], fluid=True)
+
+whole_layout = dbc.Container([
+    dbc.Row([
+        dbc.Col([side_layout],width=3),
+        dbc.Col([dashboard_layout],width=9)
+    ])
+])
+
+
 
 # Callback to handle page navigation
 @app.callback(
@@ -183,10 +254,10 @@ def generate_salary_map(_):
 overall_avg_salary = data['salary_in_usd'].mean()
 
 # Callback to update the card of overall average salary
-@callback(
-    Output('overall-average-salary', 'children'),
-    Input('overall-average-salary', 'id')  
-)
+#@callback(
+#    Output('overall-average-salary', 'children'),
+#    Input('overall-average-salary', 'id')  
+#)
 def update_overall_salary(_):
     return f"${overall_avg_salary:,.2f}"
 
