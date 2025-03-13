@@ -8,3 +8,4 @@ plotly==6.0.*
 tabulate==0.9.*
 lxml==5.3.*
 pycountry==23.12.*
+joblib==1.3.*

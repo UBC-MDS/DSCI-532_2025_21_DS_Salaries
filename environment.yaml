@@ -8,6 +8,7 @@ dependencies:
     - altair-all
     - dash
     - dash-bootstrap-components
+    - joblib
     - plotly
     - tabulate  # df.to_markdown()
     - lxml  # pd.read_html()
