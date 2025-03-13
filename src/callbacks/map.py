@@ -1,13 +1,18 @@
 import pandas as pd
 import plotly.express as px
 from dash import Dash, dcc, html, callback, Output, Input
-from src.data.load_data import data  
+from src.data.load_data import data
+import joblib
+
+memory = joblib.Memory("tmp", verbose=0)
+
 
 def register_map_callbacks(app):
     @app.callback(
         Output("salary-map", "figure"),
         Input("salary-map", "id")
     )
+    @memory.cache()  # Apply caching here
     def generate_salary_map(_):
         avg_salary_by_location = data.groupby("company_location")["salary_in_usd"].mean().reset_index()
         fig = px.choropleth(
