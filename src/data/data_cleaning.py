@@ -1,5 +1,6 @@
 import pycountry
 import pandas as pd
+import os
 
 # Read data
 data = pd.read_csv('data/raw/ds_salaries.csv')
@@ -28,19 +29,12 @@ data['company_size'] = data['company_size'].replace({
 })
 
 # Convert ISO 3166 country code to country name
-def country_code_to_name(country_code):
-    try:
-        country = pycountry.countries.get(alpha_2=country_code)
-        return country.name if country else None
-    except:
-        return None
-
-# Rename company location
-data['company_location'] = data['company_location'].apply(country_code_to_name)
+country_dict = {c.alpha_2: c.name for c in pycountry.countries}
+data['company_location'] = data['company_location'].map(country_dict)
 
 # Select the 10 most frequently occuring job titles, and the rest are renamed to others
 top_10_jobs = data['job_title'].value_counts().nlargest(10).index  # Top 10 by frequency
-data['job_title'] = data['job_title'].apply(lambda x: x if x in top_10_jobs else 'Other')
+data.loc[~data['job_title'].isin(top_10_jobs), 'job_title'] = 'Other'
 
 print(data['job_title'].value_counts())
 
@@ -55,7 +49,10 @@ data = compute_salary_ranges(data)
 
 print(data.head())
 
-# Save processed data
-data.to_csv('data/processed/salaries.csv', index=False)
+processed_data_path = "data/processed/salaries.parquet" 
 
-print("Processed data saved successfully!")
+os.makedirs("data/processed", exist_ok=True)
+
+data.to_parquet(processed_data_path, index=False) 
+
+print(f"Processed data saved successfully at: {processed_data_path}")
