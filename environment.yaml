@@ -13,6 +13,7 @@ dependencies:
     - tabulate  # df.to_markdown()
     - lxml  # pd.read_html()
     - pycountry
+    - pyarrow
     - pip
     - pip:
         - dash-vega-components
