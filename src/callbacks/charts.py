@@ -25,7 +25,14 @@ def register_chart_callbacks(app):
             filtered_df = filtered_df[filtered_df["employment_type"].isin(employment)]
 
         if filtered_df.empty:
-            return html.P("No data available.")
+            empty_chart = alt.Chart().mark_text(
+                text="No data available",
+                fontSize=20
+            ).properties(
+                width=1100,
+                height=100
+            )
+            return "No data available", empty_chart.to_dict()
 
         # Calculate average salary based on the outputs of filters
         avg_salary = filtered_df["salary_in_usd"].mean()
@@ -45,7 +52,7 @@ def register_chart_callbacks(app):
                     axis=alt.Axis(format="$~s", title=None)),
             tooltip=["work_year", "salary_in_usd"]
         ).properties(
-            width=1000,
+            width=1100,
             height=100
         ).interactive()
 
@@ -69,16 +76,21 @@ def register_chart_callbacks(app):
         if employment:
             filtered_df = filtered_df[filtered_df["employment_type"].isin(employment)]
 
+        # When no data available
         if filtered_df.empty:
-            return html.P("No data available.")
+            empty_chart = alt.Chart().mark_text(
+                text="No data available",
+                fontSize=20
+            ).properties(
+                width=450,
+                height=200
+            )
+            return empty_chart.to_dict()
 
         # Calculate average salary based on the outputs of filters
         employment_chart_data = (
             filtered_df.groupby("employment_type", as_index=False)["salary_in_usd"].mean()
         )
-
-#        if employment_chart_data .empty:
-#            return html.P("No data available.")
 
         # Create Altair Bar Chart
         employment_chart = alt.Chart(employment_chart_data).mark_bar().encode(
@@ -89,7 +101,7 @@ def register_chart_callbacks(app):
             y=alt.Y("employment_type:N", sort="-x", axis=alt.Axis(title=None)),
             tooltip=["employment_type", "salary_in_usd"]
         ).properties(
-            width=350,
+            width=450,
             height=200
         )
 
@@ -113,16 +125,22 @@ def register_chart_callbacks(app):
         if employment:
             filtered_df = filtered_df[filtered_df["employment_type"].isin(employment)]
 
+        # When no data available
         if filtered_df.empty:
-            return html.P("No data available.")
+            empty_chart = alt.Chart().mark_text(
+                text="No data available",
+                fontSize=20
+            ).properties(
+                width=450,
+                height=200
+            )
+            return empty_chart.to_dict()
 
         # Calculate average salary based on the outputs of filters
         experience_chart_data = (
             filtered_df.groupby("experience_level", as_index=False)["salary_in_usd"].mean()
         )
 
-#        if experience_chart_data.empty:
-#            return html.P("No data available.")
 
         # Create Altair Bar Chart
         experience_chart = alt.Chart(experience_chart_data).mark_bar().encode(
@@ -133,7 +151,7 @@ def register_chart_callbacks(app):
             y=alt.Y("experience_level:N", sort="-x", axis=alt.Axis(title=None)),
             tooltip=["experience_level", "salary_in_usd"]
         ).properties(
-            width=350,
+            width=450,
             height=200
         )
 
@@ -159,16 +177,22 @@ def register_chart_callbacks(app):
         if employment:
             filtered_df = filtered_df[filtered_df["employment_type"].isin(employment)]
 
+        # When no data available
         if filtered_df.empty:
-            return html.P("No data available.")
+            empty_chart = alt.Chart().mark_text(
+                text="No data available",
+                fontSize=20
+            ).properties(
+                width=450,
+                height=200
+            )
+            return empty_chart.to_dict()
 
         # Calculate average salary based on the outputs of filters
         salary_by_size = (
             filtered_df.groupby("company_size", as_index=False)["salary_in_usd"].mean()
         )
 
-#        if salary_by_size.empty:
-#            return html.P("No data available.")
         
         # Create Altair Bar Chart
         size_bar_chart = alt.Chart(salary_by_size).mark_bar().encode(
@@ -179,7 +203,7 @@ def register_chart_callbacks(app):
             y=alt.Y("company_size:N",sort="-x", axis=alt.Axis(title=None)),
             tooltip=["company_size", "salary_in_usd"]
         ).properties(
-            width=350,
+            width=450,
             height=200
         )
         return size_bar_chart.to_dict()
@@ -203,16 +227,22 @@ def register_chart_callbacks(app):
         if employment:
             filtered_df = filtered_df[filtered_df["employment_type"].isin(employment)]
 
+       # When no data available
         if filtered_df.empty:
-            return html.P("No data available.")
+            empty_chart = alt.Chart().mark_text(
+                text="No data available",
+                fontSize=20
+            ).properties(
+                width=400,
+                height=200
+            )
+            return empty_chart.to_dict()
 
         # Calculate average salary based on the outputs of filters and choose top 10
         salary_by_title = (
             filtered_df.groupby("job_title", as_index=False)["salary_in_usd"].mean()
         )
-
- #       if salary_by_title.empty:
- #           return html.P("No data available.")
+        
 
         top10_salary_by_title = salary_by_title.nlargest(10, "salary_in_usd")
 
@@ -224,7 +254,7 @@ def register_chart_callbacks(app):
             y=alt.Y("job_title:N",sort="-x", axis=alt.Axis(title=None)),
             tooltip=["job_title", "salary_in_usd"]
         ).properties(
-            width=350,
+            width=400,
             height=200
         )
         return title_bar_chart.to_dict()
