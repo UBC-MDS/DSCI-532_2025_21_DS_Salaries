@@ -12,6 +12,7 @@ def register_filter_callbacks(app):
     def set_company_location_options(_):
         unique_locations = sorted(data['company_location'].dropna().unique())
         return [{'label': location, 'value': location} for location in unique_locations]
+    
 
     # Callback: Get options for dropdown of experience level
     @app.callback(

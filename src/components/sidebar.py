@@ -55,13 +55,13 @@ side_layout = dbc.Container([
     ]),
     # filter
     dbc.Row([
-        dbc.Col(dcc.Dropdown(id='company-location', options=[], placeholder="Select Company Location"))
+        dbc.Col(dcc.Dropdown(id='company-location', options=[], multi=True, placeholder="Select Company Location"))
     ], className="mb-4", style = {"color":"black"}),
     dbc.Row([
-        dbc.Col(dcc.Dropdown(id='experience-level', options=[], placeholder="Select Experience Level"))
+        dbc.Col(dcc.Dropdown(id='experience-level', options=[], multi=True, placeholder="Select Experience Level"))
     ], className="mb-4", style = {"color":"black"}),
     dbc.Row([
-        dbc.Col(dcc.Dropdown(id='employment-type', options=[], placeholder="Select Employment Type"))
+        dbc.Col(dcc.Dropdown(id='employment-type', options=[], multi=True, placeholder="Select Employment Type"))
     ], className="mb-4", style = {"color":"black"}),
 
 
