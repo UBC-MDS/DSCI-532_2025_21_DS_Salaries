@@ -39,7 +39,7 @@ def register_chart_callbacks(app):
         )
 
         line_chart = alt.Chart(line_chart_data).mark_line(point=True).encode(
-            x=alt.X("work_year:O", title="Year"),
+            x=alt.X("work_year:O", axis=alt.Axis(title=None, labelAngle=0)),
             y=alt.Y("salary_in_usd:Q",
                     scale=alt.Scale(nice=True),
                     axis=alt.Axis(format="$~s", title=None)),
