@@ -1,6 +1,6 @@
 import dash
 import dash_bootstrap_components as dbc
-from dash import Dash, dcc, html, callback, Output, Input
+from dash import Dash, dcc, html, callback, Output, Input, State
 import sys
 import os
 
@@ -78,6 +78,17 @@ def display_page(btn_dashboard, btn_map):
         return map_layout
     else:
         return dashboard_layout
+    
+# Callback to toggle About section visibility
+@callback(
+    Output("collapse-about", "is_open"),
+    Input("toggle-about", "n_clicks"),
+    State("collapse-about", "is_open")
+)
+def toggle_about(n, is_open):
+    if n:
+        return not is_open
+    return is_open
 
 # Register map callbacks
 register_map_callbacks(app)
