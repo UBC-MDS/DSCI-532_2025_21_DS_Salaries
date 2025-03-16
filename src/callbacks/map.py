@@ -21,12 +21,12 @@ def register_map_callbacks(app):
         
         # apply filters
         if location:
-            filtered_df = filtered_df[filtered_df["company_location"] == location]
+            filtered_df = filtered_df[filtered_df["company_location"].isin(location)]
         if experience:
-            filtered_df = filtered_df[filtered_df["experience_level"] == experience]
+            filtered_df = filtered_df[filtered_df["experience_level"].isin(experience)]
         if employment:
-            filtered_df = filtered_df[filtered_df["employment_type"] == employment]
-        
+            filtered_df = filtered_df[filtered_df["employment_type"].isin(employment)]
+            
         # when data is not available
         if filtered_df.empty:
             return px.choropleth(title="No Data Available") 
