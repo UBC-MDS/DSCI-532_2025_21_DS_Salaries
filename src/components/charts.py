@@ -4,6 +4,7 @@ import dash_vega_components as dvc
 
 # Dashboard page layout
 dashboard_layout = dbc.Container([
+    html.Br(),
 
     # Salary Card & Line Chart
     dbc.Row([
@@ -12,7 +13,8 @@ dashboard_layout = dbc.Container([
             dvc.Vega(id='line-chart', className="border p-3")
         ])
     ]),
-
+    html.Br(),
+    html.Br(),
     # Bar charts
     dbc.Row([
 

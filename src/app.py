@@ -17,7 +17,7 @@ from src.components.charts import dashboard_layout
 from src.components.map import map_layout
 
 # Initialize Dash app with Bootstrap
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],title="Salaries Tracker")
 server = app.server
 
 # Define App Layout (Navigation + Page Content)
