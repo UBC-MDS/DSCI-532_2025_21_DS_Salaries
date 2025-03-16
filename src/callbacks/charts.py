@@ -52,7 +52,7 @@ def register_chart_callbacks(app):
                     axis=alt.Axis(format="$~s", title=None)),
             tooltip=["work_year", "salary_in_usd"]
         ).properties(
-            width=1100,
+            width=1300,
             height=100
         ).interactive()
 

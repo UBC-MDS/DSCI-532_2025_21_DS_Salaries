@@ -12,7 +12,8 @@ dashboard_layout = dbc.Container([
             dvc.Vega(id='line-chart', className="border p-3")
         ])
     ]),
-
+    html.Br(),
+    html.Br(),
     # Bar charts
     dbc.Row([
 
