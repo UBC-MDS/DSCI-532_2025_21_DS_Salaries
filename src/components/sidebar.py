@@ -14,6 +14,15 @@ des = html.Div([
     html.P("Latest update on March 9, 2025.")
 ])
 
+about_section = html.Div([
+    dbc.Button(
+        "About", id="toggle-about", color="info", className="mb-2", n_clicks=0
+    ),
+    dbc.Collapse(
+        dbc.Card(dbc.CardBody(des)), id="collapse-about", is_open=False
+    )
+])
+
 side_layout = dbc.Container([
     dbc.Row([
         # title
@@ -75,7 +84,7 @@ side_layout = dbc.Container([
         html.H1(' ')
     ]),
     dbc.Row([
-        des
+        about_section
     ])
 ]
 
