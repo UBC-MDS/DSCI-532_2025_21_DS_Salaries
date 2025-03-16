@@ -73,7 +73,13 @@ side_layout = dbc.Container([
         dbc.Col(dcc.Dropdown(id='employment-type', options=[], multi=True, placeholder="Select Employment Type"))
     ], className="mb-4", style = {"color":"black"}),
 
-
+    # Reset All Filters Button
+    dbc.Row([
+        dbc.Col(
+            dbc.Button("Reset All Filters", id="reset-filters", color="danger", className="mb-4 w-100")
+        )
+    ]),
+    
     dbc.Row([
         html.H1(' ')
     ]),

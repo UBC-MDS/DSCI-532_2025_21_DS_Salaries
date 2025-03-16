@@ -31,3 +31,16 @@ def register_filter_callbacks(app):
     def set_employment_type_options(_):
         unique_employment_types = sorted(data['employment_type'].dropna().unique())
         return [{'label': emp_type, 'value': emp_type} for emp_type in unique_employment_types]
+    
+    # Callback: Reset all filters when button is clicked
+    @app.callback(
+        [
+            Output('company-location', 'value'),
+            Output('experience-level', 'value'),
+            Output('employment-type', 'value')
+        ],
+        Input('reset-filters', 'n_clicks'),
+        prevent_initial_call=True
+    )
+    def reset_filters(n_clicks):
+        return None, None, None  # Reset all dropdowns to no selection
