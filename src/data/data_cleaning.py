@@ -39,6 +39,15 @@ data.loc[~data['job_title'].isin(top_10_jobs), 'job_title'] = 'Other'
 print(data['job_title'].value_counts())
 
 def compute_salary_ranges(df):
+    """
+    Adds a 'salary_range' column to classify salaries into predefined brackets.
+
+    Parameters:
+    - df (pd.DataFrame): DataFrame containing a 'salary_in_usd' column.
+
+    Returns:
+    - pd.DataFrame: Updated DataFrame with 'salary_range' categories.
+    """
     bins = [0, 50000, 100000, 150000, 200000, df["salary_in_usd"].max()]  
     labels = ["<50K", "50K-100K", "100K-150K", "150K-200K", ">200K"] 
     df["salary_range"] = pd.cut(df["salary_in_usd"], bins=bins, labels=labels, include_lowest=True)
