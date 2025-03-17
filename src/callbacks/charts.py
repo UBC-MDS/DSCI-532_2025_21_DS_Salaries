@@ -5,7 +5,13 @@ import altair as alt
 from src.data.load_data import data  
 
 def register_chart_callbacks(app):
-    # callback to update card and line chart
+    """
+    Registers all callback functions for updating charts in the dashboard.
+    
+    Parameters:
+    - app (Dash): The Dash application instance.
+    """
+    
     @app.callback(
         Output('filtered-average-salary', 'children'),
         Output('line-chart', 'spec'),
@@ -14,7 +20,19 @@ def register_chart_callbacks(app):
         Input('employment-type', 'value')
     )
     def update_dashboard(location, experience, employment):
-        # filter
+        """
+        Updates the average salary display and line chart based on selected filters.
+
+        Parameters:
+        - location (str or list): Selected company location(s).
+        - experience (str or list): Selected experience level(s).
+        - employment (str or list): Selected employment type(s).
+
+        Returns:
+        - str: Formatted average salary.
+        - dict: Altair line chart specification.
+        """
+        
         filtered_df = data.copy()
         
         if location:
@@ -66,7 +84,18 @@ def register_chart_callbacks(app):
         Input('employment-type', 'value')
     )
     def update_bar_chart_employment_type(location, experience, employment):
-        # Filter
+        """
+        Updates the bar chart for employment types based on selected filters.
+
+        Parameters:
+        - location (str or list): Selected company location(s).
+        - experience (str or list): Selected experience level(s).
+        - employment (str or list): Selected employment type(s).
+
+        Returns:
+        - dict: Altair bar chart specification.
+        """
+        
         filtered_df = data.copy()
         
         if location:
@@ -115,7 +144,18 @@ def register_chart_callbacks(app):
         Input('employment-type', 'value')
     )
     def update_bar_chart_experience_level(location, experience, employment):
-        # Filter
+        """
+        Updates the bar chart for salary by experience level based on selected filters.
+
+        Parameters:
+        - location (str or list): Selected company location(s).
+        - experience (str or list): Selected experience level(s).
+        - employment (str or list): Selected employment type(s).
+
+        Returns:
+        - dict: Altair bar chart specification.
+        """
+        
         filtered_df = data.copy()
         
         if location:
@@ -167,7 +207,17 @@ def register_chart_callbacks(app):
         Input('employment-type', 'value')
     )
     def show_salary_by_size_bar(location, experience, employment):
-        # Filter
+        """
+        Updates the bar chart for salary by company size based on selected filters.
+
+        Parameters:
+        - location (str or list): Selected company location(s).
+        - experience (str or list): Selected experience level(s).
+        - employment (str or list): Selected employment type(s).
+
+        Returns:
+        - dict: Altair bar chart specification.
+        """
         filtered_df = data.copy()
         
         if location:
@@ -217,7 +267,18 @@ def register_chart_callbacks(app):
         Input('employment-type', 'value')
     )
     def show_salary_by_title(location, experience, employment):
-        # Filter
+        """
+        Updates the bar chart displaying the top 10 job titles by salary based on selected filters.
+
+        Parameters:
+        - location (str or list): Selected company location(s).
+        - experience (str or list): Selected experience level(s).
+        - employment (str or list): Selected employment type(s).
+
+        Returns:
+        - dict: Altair bar chart specification.
+        """
+        
         filtered_df = data.copy()
         
         if location:

@@ -8,6 +8,13 @@ memory = joblib.Memory("tmp", verbose=0)
 
 
 def register_map_callbacks(app):
+    """
+    Registers the callback function for updating the salary map in the dashboard.
+
+    Parameters:
+    - app (Dash): The Dash application instance.
+    """
+    
     @app.callback(
         Output("salary-map", "figure"),
         Input('company-location', 'value'),
@@ -16,17 +23,29 @@ def register_map_callbacks(app):
     )
     @memory.cache()  # Apply caching here
     def generate_salary_map(location, experience, employment):
+        """
+        Generates an interactive choropleth map displaying the average salary 
+        by company location based on the selected filters.
+
+        Parameters:
+        - location (str or list): Selected company location(s) from the dropdown.
+        - experience (str or list): Selected experience level(s) from the dropdown.
+        - employment (str or list): Selected employment type(s) from the dropdown.
+
+        Returns:
+        - plotly.graph_objs._figure.Figure: A choropleth map displaying salary data.
+        """
         
         filtered_df = data.copy()
         
         # apply filters
         if location:
-            filtered_df = filtered_df[filtered_df["company_location"] == location]
+            filtered_df = filtered_df[filtered_df["company_location"].isin(location)]
         if experience:
-            filtered_df = filtered_df[filtered_df["experience_level"] == experience]
+            filtered_df = filtered_df[filtered_df["experience_level"].isin(experience)]
         if employment:
-            filtered_df = filtered_df[filtered_df["employment_type"] == employment]
-        
+            filtered_df = filtered_df[filtered_df["employment_type"].isin(employment)]
+            
         # when data is not available
         if filtered_df.empty:
             return px.choropleth(title="No Data Available") 
