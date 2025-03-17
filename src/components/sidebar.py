@@ -11,7 +11,7 @@ des = html.Div([
         href="https://github.com/UBC-MDS/DSCI-532_2025_21_DS_Salaries",
         target="_blank"  # Opens in a new tab
     ),
-    html.P("Latest update on March 9, 2025.")
+    html.P("Latest update on March 16, 2025.")
 ])
 
 about_section = html.Div([

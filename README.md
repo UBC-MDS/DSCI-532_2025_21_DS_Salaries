@@ -35,7 +35,7 @@ Our dashboard includes the following interactive visualizations:
 ### Demo GIF
 Take a look at our demo:
 
-![Demo Animation](img/demo_ml3.gif)
+![Demo Animation](img/demo_ml4.gif)
 
 ### Dashboard
 Try the live demo::
